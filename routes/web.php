@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\HomeController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,3 +21,12 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+
+Route::middleware('auth')->group(function() {
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+    Route::get('/contacts', [ContactController::class, 'getContacts'])->name('contacts');
+    Route::get('/messages/{contact}', [ContactController::class, 'getMessages'])->name('messages');
+
+    Route::post('/messages/{contact}/send', [ContactController::class, 'sendMessage'])->name('messages.send');
+});
